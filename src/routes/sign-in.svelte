@@ -1,8 +1,24 @@
-<script lang="ts">
+<script lang="ts" context="module">
 	import { goto } from '$app/navigation';
 	import SignInForm from '$lib/components/SignInForm.svelte';
 	import SignUpForm from '$lib/components/SignUpForm.svelte';
+	import type { Load } from '@sveltejs/kit';
 
+	export const load: Load = async ({ session }) => {
+		if (session.user !== undefined) {
+			return {
+				redirect: '/',
+				status: 301
+			};
+		}
+
+		return {
+			status: 200
+		};
+	};
+</script>
+
+<script lang="ts">
 	let currentForm: 'sign-in' | 'sign-up' = 'sign-in';
 
 	const toggleForm = () => {

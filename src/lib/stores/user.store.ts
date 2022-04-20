@@ -22,7 +22,14 @@ function createUserStore(): UserStore {
 			console.log(email, password);
 		},
 		async signIn({ email, password }) {
-			console.log(email, password);
+			const r = await fetch('/api/sign-in', {
+				method: 'POST',
+				body: JSON.stringify({ email, password })
+			});
+
+			const user: User = await r.json();
+
+			set(user);
 		},
 		async signOut() {
 			console.log('sign out');

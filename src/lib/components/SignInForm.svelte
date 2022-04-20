@@ -1,14 +1,8 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+	import userStore from '$lib/stores/user.store';
 	import { createForm } from 'svelte-forms-lib';
 	import * as yup from 'yup';
 	import LoadingButton from './LoadingButton.svelte';
-
-	interface EventProps {
-		signin: void;
-	}
-
-	const dispatch = createEventDispatcher<EventProps>();
 
 	interface FormProps {
 		email: string;
@@ -25,22 +19,7 @@
 			password: yup.string().min(8).required()
 		}),
 		onSubmit: async (values) => {
-			const response = await fetch('/api/sign-in', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					...values
-				})
-			});
-
-			if (response.ok) {
-				alert('Successfully signed up!');
-				dispatch('signin');
-			} else {
-				alert('Invalid credentials');
-			}
+			await userStore.signIn({ ...values });
 		}
 	});
 </script>
