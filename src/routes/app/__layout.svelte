@@ -2,10 +2,10 @@
 	import type { Load } from '@sveltejs/kit';
 
 	export const load: Load = async ({ session }) => {
-		if (session.user !== null) {
+		if (session.user === null) {
 			return {
 				redirect: '/',
-				status: 301
+				status: 302
 			};
 		}
 
