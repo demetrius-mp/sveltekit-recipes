@@ -13,7 +13,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		const user = await getUser(cookies.jwt);
 		event.locals.user = user;
 	} else {
-		event.locals.user = undefined;
+		event.locals.user = null;
 	}
 
 	const response = await resolve(event);
@@ -22,5 +22,5 @@ export const handle: Handle = async ({ event, resolve }) => {
 };
 
 export const getSession: GetSession = async (event) => {
-	return { user: event.locals.user } || {};
+	return { user: event.locals.user || null };
 };

@@ -1,5 +1,5 @@
+import { session } from '$app/stores';
 import type { User } from '$lib/types';
-import { writable, type Writable } from 'svelte/store';
 
 type AuthData = {
 	email: string;
@@ -7,17 +7,13 @@ type AuthData = {
 };
 
 type UserStore = {
-	subscribe: Writable<User>['subscribe'];
 	signUp({ email, password }: AuthData): Promise<void>;
 	signIn({ email, password }: AuthData): Promise<void>;
 	signOut(): Promise<void>;
 };
 
 function createUserStore(): UserStore {
-	const { set, subscribe, update } = writable<User>();
-
 	return {
-		subscribe,
 		async signUp({ email, password }) {
 			console.log(email, password);
 		},
@@ -29,10 +25,16 @@ function createUserStore(): UserStore {
 
 			const user: User = await r.json();
 
-			set(user);
+			session.set({
+				user
+			});
 		},
 		async signOut() {
-			console.log('sign out');
+			await fetch('/api/sign-out');
+
+			session.set({
+				user: null
+			});
 		}
 	};
 }

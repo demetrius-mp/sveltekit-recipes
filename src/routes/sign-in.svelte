@@ -1,14 +1,14 @@
-<script lang="ts" context="module">
+<script context="module" lang="ts">
 	import { goto } from '$app/navigation';
 	import SignInForm from '$lib/components/SignInForm.svelte';
 	import SignUpForm from '$lib/components/SignUpForm.svelte';
 	import type { Load } from '@sveltejs/kit';
 
 	export const load: Load = async ({ session }) => {
-		if (session.user !== undefined) {
+		if (session.user !== null) {
 			return {
 				redirect: '/',
-				status: 301
+				status: 302
 			};
 		}
 

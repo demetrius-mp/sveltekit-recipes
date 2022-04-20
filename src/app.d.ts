@@ -7,11 +7,11 @@ import { User } from '$lib/types';
 declare global {
 	declare namespace App {
 		interface Locals {
-			user?: User;
+			user: User | null;
 		}
 		// interface Platform {}
 		interface Session {
-			user?: User;
+			user: User | null;
 		}
 		// interface Stuff {}
 	}

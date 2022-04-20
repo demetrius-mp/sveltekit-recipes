@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import userStore from '$lib/stores/user.store';
 	import { createForm } from 'svelte-forms-lib';
 	import * as yup from 'yup';
@@ -20,6 +21,7 @@
 		}),
 		onSubmit: async (values) => {
 			await userStore.signIn({ ...values });
+			await goto('/');
 		}
 	});
 </script>
