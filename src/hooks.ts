@@ -9,6 +9,11 @@ type Cookies = {
 export const handle: Handle = async ({ event, resolve }) => {
 	const cookies = cookie.parse(event.request.headers.get('cookie') || '') as Cookies;
 
+	if (event.url.pathname === '/api/sign-out') {
+		event.locals.user = null;
+		return await resolve(event);
+	}
+
 	if (cookies?.jwt) {
 		const user = await getUser(cookies.jwt);
 		event.locals.user = user;
