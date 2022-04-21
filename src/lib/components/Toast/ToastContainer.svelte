@@ -31,7 +31,7 @@
 					title={toast.title}
 					body={toast.body}
 					additionalInfo={toast.additionalInfo}
-					color={toast.type}
+					color={toast.color}
 				/>
 			</div>
 		{/each}

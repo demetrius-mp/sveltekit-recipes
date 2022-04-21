@@ -19,12 +19,12 @@ function createToastStore(): ToastStore {
 	return {
 		subscribe,
 		removeToast,
-		addToast({ body, title, additionalInfo, type, removeAfter }) {
+		addToast({ body, title, additionalInfo, color, removeAfter }) {
 			const id = new Date().valueOf() + body;
 			update((all) => [
 				{
 					id,
-					type,
+					color,
 					body,
 					title,
 					additionalInfo,

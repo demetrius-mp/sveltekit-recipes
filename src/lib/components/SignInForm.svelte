@@ -27,7 +27,7 @@
 					body: 'You have been signed in successfully.',
 					removeAfter: 3000,
 					title: 'Success',
-					type: 'success'
+					color: 'success'
 				});
 				await goto('/');
 			} catch (err) {
@@ -37,7 +37,7 @@
 						body: err.message,
 						removeAfter: 3000,
 						title: 'Error',
-						type: 'danger'
+						color: 'danger'
 					});
 				}
 			}

@@ -10,7 +10,7 @@ export type Color =
 
 export type Toast = {
 	id: string;
-	type: Color;
+	color: Color;
 	title: string;
 	body: string;
 	additionalInfo?: string;
