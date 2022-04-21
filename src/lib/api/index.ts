@@ -14,6 +14,10 @@ export async function getUser(token: string): Promise<User> {
 		}
 	});
 
+	if (response.status === 401) {
+		throw new Error('Invalid token');
+	}
+
 	const userData = (await response.json()) as Omit<User, 'accessToken'>;
 
 	return {

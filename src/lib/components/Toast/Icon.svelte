@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Color } from './types';
 
-	export let color: Color;
+	export let color: Color = 'primary';
 	export let size: number = 20;
 </script>
 
