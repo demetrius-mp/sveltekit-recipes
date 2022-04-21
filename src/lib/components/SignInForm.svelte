@@ -4,6 +4,7 @@
 	import { createForm } from 'svelte-forms-lib';
 	import * as yup from 'yup';
 	import LoadingButton from './LoadingButton.svelte';
+	import { toastStore } from './Toast';
 
 	interface FormProps {
 		email: string;
@@ -20,8 +21,26 @@
 			password: yup.string().min(8).required()
 		}),
 		onSubmit: async (values) => {
-			await userStore.signIn({ ...values });
-			await goto('/');
+			try {
+				await userStore.signIn({ ...values });
+				toastStore.addToast({
+					body: 'You have been signed in successfully.',
+					removeAfter: 3000,
+					title: 'Success',
+					type: 'success'
+				});
+				await goto('/');
+			} catch (err) {
+				if (err instanceof Error) {
+					console.error(err);
+					toastStore.addToast({
+						body: err.message,
+						removeAfter: 3000,
+						title: 'Error',
+						type: 'danger'
+					});
+				}
+			}
 		}
 	});
 </script>

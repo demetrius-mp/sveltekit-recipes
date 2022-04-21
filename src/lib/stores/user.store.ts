@@ -23,6 +23,10 @@ function createUserStore(): UserStore {
 				body: JSON.stringify({ email, password })
 			});
 
+			if (r.status === 401) {
+				throw new Error('Invalid credentials');
+			}
+
 			const user: User = await r.json();
 
 			session.set({

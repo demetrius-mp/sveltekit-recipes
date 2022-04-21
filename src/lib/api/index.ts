@@ -33,8 +33,8 @@ export async function signIn({ email, password }: AuthData): Promise<User> {
 		body
 	});
 
-	if (!accessTokenResponse.ok) {
-		throw new Error(accessTokenResponse.statusText);
+	if (accessTokenResponse.status === 401) {
+		throw new Error('Invalid credentials');
 	}
 
 	const { access_token }: { access_token: string } = await accessTokenResponse.json();
