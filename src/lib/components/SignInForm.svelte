@@ -1,15 +1,21 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import userStore from '$lib/stores/user.store';
+	import { createEventDispatcher } from 'svelte';
 	import { createForm } from 'svelte-forms-lib';
 	import * as yup from 'yup';
 	import LoadingButton from './LoadingButton.svelte';
 	import { toastStore } from './Toast';
 
-	interface FormProps {
+	type EventProps = {
+		signin: void;
+	};
+
+	const dispatch = createEventDispatcher<EventProps>();
+
+	type FormProps = {
 		email: string;
 		password: string;
-	}
+	};
 
 	const { form, isSubmitting, handleSubmit, errors } = createForm<FormProps>({
 		initialValues: {
@@ -29,7 +35,7 @@
 					title: 'Success',
 					color: 'success'
 				});
-				await goto('/');
+				dispatch('signin');
 			} catch (err) {
 				if (err instanceof Error) {
 					console.error(err);

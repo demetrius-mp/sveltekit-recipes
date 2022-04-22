@@ -25,8 +25,8 @@
 		currentForm = currentForm === 'sign-in' ? 'sign-up' : 'sign-in';
 	};
 
-	async function goHome() {
-		await goto('/');
+	async function gotoApp() {
+		await goto('/app');
 	}
 </script>
 
@@ -63,7 +63,7 @@
 					</small>
 				</div>
 				{#if currentForm === 'sign-in'}
-					<SignInForm on:signin={goHome} />
+					<SignInForm on:signin={gotoApp} />
 				{:else if currentForm === 'sign-up'}
 					<SignUpForm on:signup={toggleForm} />
 				{/if}

@@ -2,7 +2,13 @@ import type { User } from '$lib/types';
 
 const baseUrl = 'http://localhost:8000';
 
-type AuthData = {
+type SignInData = {
+	email: string;
+	password: string;
+};
+
+type SignUpData = {
+	name: string;
 	email: string;
 	password: string;
 };
@@ -26,7 +32,7 @@ export async function getUser(token: string): Promise<User> {
 	};
 }
 
-export async function signIn({ email, password }: AuthData): Promise<User> {
+export async function signIn({ email, password }: SignInData): Promise<User> {
 	const body = new URLSearchParams(`username=${email}&password=${password}`);
 
 	const accessTokenResponse = await fetch(`${baseUrl}/auth/sign-in`, {
@@ -46,4 +52,23 @@ export async function signIn({ email, password }: AuthData): Promise<User> {
 	const user = await getUser(access_token);
 
 	return user;
+}
+
+export async function signUp({ name, email, password }: SignUpData): Promise<void> {
+	const response = await fetch(`${baseUrl}/auth/sign-up`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			name,
+			email,
+			password
+		})
+	});
+
+	if (response.status === 409) {
+		const error = (await response.json()) as { detail: string };
+		throw new Error(error.detail);
+	}
 }

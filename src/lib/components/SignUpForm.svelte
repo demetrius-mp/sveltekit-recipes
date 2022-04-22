@@ -3,6 +3,7 @@
 	import { createForm } from 'svelte-forms-lib';
 	import * as yup from 'yup';
 	import LoadingButton from './LoadingButton.svelte';
+	import { toastStore } from './Toast';
 
 	interface EventProps {
 		signup: void;
@@ -10,19 +11,22 @@
 
 	const dispatch = createEventDispatcher<EventProps>();
 
-	interface FormProps {
+	type FormProps = {
+		name: string;
 		email: string;
 		password: string;
 		passwordConfirmation: string;
-	}
+	};
 
 	const { form, isSubmitting, handleSubmit, errors } = createForm<FormProps>({
 		initialValues: {
+			name: '',
 			email: '',
 			password: '',
 			passwordConfirmation: ''
 		},
 		validationSchema: yup.object({
+			name: yup.string().required(),
 			email: yup.string().email().required(),
 			password: yup.string().min(8).required(),
 			passwordConfirmation: yup
@@ -37,22 +41,46 @@
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify({
+					name: values.name,
 					email: values.email,
 					password: values.password
 				})
 			});
 
 			if (response.ok) {
-				alert('Successfully signed up!');
+				toastStore.addToast({
+					body: 'You have been signed up successfully.',
+					removeAfter: 3000,
+					title: 'Success',
+					color: 'success'
+				});
 				dispatch('signup');
 			} else {
-				$errors.email = 'Email already in use';
+				const error = (await response.json()) as { error: string };
+				if (error.error === 'This email is already being used.') {
+					$errors.email = error.error;
+				}
 			}
 		}
 	});
 </script>
 
 <form on:submit={handleSubmit}>
+	<div class="mb-3">
+		<label for="name" class="form-label">Name</label>
+		<input
+			bind:value={$form.name}
+			class:is-invalid={$errors.name}
+			required
+			class="form-control form-control-lg"
+			type="text"
+			name="name"
+			placeholder="John Doe"
+		/>
+		{#if $errors.name}
+			<div class="invalid-feedback">{$errors.name}</div>
+		{/if}
+	</div>
 	<div class="mb-3">
 		<label for="email" class="form-label">Email</label>
 		<input
