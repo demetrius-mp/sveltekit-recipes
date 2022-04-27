@@ -22,7 +22,7 @@
 {#if $toastStore.length}
 	<div
 		style="z-index: 10;"
-		class="toast-container position-absolute {positionClass[position]} mx-2 my-2"
+		class="toast-container position-absolute {positionClass[position]} margins"
 	>
 		{#each $toastStore as toast (toast.id)}
 			<div animate:flip transition:fade>
@@ -39,7 +39,11 @@
 {/if}
 
 <style>
-	.below-navbar {
-		margin-top: 0px;
+	.margins {
+		--margin: calc(0.5rem + 7px);
+		margin-top: var(--margin);
+		margin-bottom: var(--margin);
+		margin-left: var(--margin);
+		margin-right: var(--margin);
 	}
 </style>

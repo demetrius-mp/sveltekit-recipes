@@ -19,7 +19,7 @@
 	}
 </script>
 
-<div class="toast fade show" role="alert" aria-live="assertive" aria-atomic="true">
+<div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
 	<div class="toast-header">
 		<Icon {color} />
 		<strong class="me-auto">{title}</strong>

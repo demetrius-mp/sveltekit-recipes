@@ -32,9 +32,12 @@ function createToastStore(): ToastStore {
 				},
 				...all
 			]);
-			setTimeout(() => {
-				removeToast(id);
-			}, removeAfter);
+
+			if (removeAfter !== 'never') {
+				setTimeout(() => {
+					removeToast(id);
+				}, removeAfter);
+			}
 			return id;
 		}
 	};

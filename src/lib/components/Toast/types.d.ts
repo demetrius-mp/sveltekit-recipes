@@ -14,7 +14,7 @@ export type Toast = {
 	title: string;
 	body: string;
 	additionalInfo?: string;
-	removeAfter: number;
+	removeAfter: number | 'never';
 };
 
 export type ToastCreateInput = Omit<Toast, 'id'>;
