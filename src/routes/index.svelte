@@ -1,27 +1,3 @@
-<script lang="ts">
-	import { session } from '$app/stores';
-	import { toastStore } from '$lib/components/Toast';
-	import userStore from '$lib/stores/user.store';
-</script>
-
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
-
-<a href="/sign-in">Sign In</a>
-{#if $session.user?.name}
-	<button on:click={userStore.signOut} class="btn btn-primary">Sign Out</button>
-{/if}
-<button
-	on:click={() => {
-		toastStore.addToast({
-			body: 'Hello world',
-			color: 'success',
-			removeAfter: 3000,
-			title: 'Toast',
-			additionalInfo: 'Additional'
-		});
-	}}
-	class="btn btn-outline-primary"
->
-	toast
-</button>
+<div class="container mt-3">
+	<h1 class="text-center lead fs-1">Welcome to your next Invoice Manager!</h1>
+</div>
