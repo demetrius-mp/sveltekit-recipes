@@ -18,11 +18,13 @@
 		});
 		await goto('/');
 	}
+
+	$: navbarBrandLink = $session.user ? '/app' : '/';
 </script>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 	<div class="container-fluid">
-		<a class="navbar-brand" href="/">Invoice Manager</a>
+		<a class="navbar-brand" href={navbarBrandLink}>Invoice Manager</a>
 		<div class="navbar-nav">
 			<div class="nav-item">
 				{#if !$session.user}
