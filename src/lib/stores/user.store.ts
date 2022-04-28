@@ -30,14 +30,16 @@ function createUserStore(): UserStore {
 			const user: User = await r.json();
 
 			session.set({
-				user
+				user,
+				flashMessages: []
 			});
 		},
 		async signOut() {
 			await fetch('/api/sign-out');
 
 			session.set({
-				user: null
+				user: null,
+				flashMessages: []
 			});
 		}
 	};
