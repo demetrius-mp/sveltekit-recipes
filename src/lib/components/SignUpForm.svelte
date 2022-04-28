@@ -122,7 +122,7 @@
 			placeholder="********"
 			required
 		/>
-		{#if $errors.password}
+		{#if $errors.passwordConfirmation}
 			<div class="invalid-feedback">{$errors.passwordConfirmation}</div>
 		{/if}
 	</div>
