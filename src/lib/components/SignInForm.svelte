@@ -41,7 +41,7 @@
 					console.error(err);
 					toastStore.addToast({
 						body: err.message,
-						removeAfter: 3000,
+						removeAfter: 'never',
 						title: 'Error',
 						color: 'danger'
 					});
