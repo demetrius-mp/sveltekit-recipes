@@ -4,3 +4,12 @@ export type User = {
 	email: string;
 	accessToken: string;
 };
+
+export type Post = {
+	id: number;
+	title: string;
+	description: string;
+	tags: string[];
+	body: string;
+	createdAt: Date;
+};
