@@ -12,9 +12,9 @@
 </script>
 
 <script lang="ts">
-	export let totalItems = 0;
-	export let pageSize = 10;
-	export let currentPage = 1;
+	export let totalItems: number;
+	export let pageSize: number;
+	export let currentPage: number = 1;
 
 	const dispatch = createEventDispatcher<PaginatorEvents>();
 
