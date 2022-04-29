@@ -60,14 +60,14 @@
 			<Paginator {totalItems} {currentPage} {pageSize} on:pagechange={handlePageChange} />
 		</div>
 	</div>
-	<div class="row row-cols-1 g-3 row-cols-md-2">
-		{#if isLoading}
-			<div class="text-center" style="margin-top: 100px;">
-				<div class="spinner-border spinner-size" role="status">
-					<span class="visually-hidden">Loading...</span>
-				</div>
+	{#if isLoading}
+		<div class="text-center" style="margin-top: 100px;">
+			<div class="spinner-border spinner-size" role="status">
+				<span class="visually-hidden">Loading...</span>
 			</div>
-		{:else}
+		</div>
+	{:else}
+		<div class="row row-cols-1 g-3 row-cols-md-2">
 			{#each posts as post}
 				<div class="col">
 					<div class="card shadow-sm">
@@ -87,8 +87,8 @@
 					</div>
 				</div>
 			{/each}
-		{/if}
-	</div>
+		</div>
+	{/if}
 	<div class="mt-3 d-flex justify-content-end" />
 </div>
 
