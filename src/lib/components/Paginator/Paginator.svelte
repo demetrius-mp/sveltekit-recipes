@@ -31,7 +31,7 @@
 		for (let val = 1; val <= totalPages; ++val) {
 			// Put in -1's where the ellipsis will go
 			const pageNumberValue =
-				Math.abs(currentPage - val) < 2 || val == 1 || val == totalPages ? val : -1;
+				Math.abs(currentPage - val) < 2 || val === 1 || val === totalPages ? val : -1;
 			pageButtons.push(pageNumberValue);
 		}
 		// Get rid of duplicate -1s which represent an ellipsis
@@ -42,7 +42,7 @@
 {#if totalPages > 1}
 	<nav aria-label="Record navigation">
 		<ul class="pagination">
-			<li class="page-item" class:disabled={currentPage == 1}>
+			<li class="page-item" class:disabled={currentPage === 1}>
 				<a
 					class="page-link"
 					href={'#'}
@@ -55,8 +55,9 @@
 			{#each pageButtons as pageNumber}
 				<li
 					class="page-item"
-					class:active={pageNumber == currentPage}
-					class:disabled={pageNumber == -1}
+					class:active={pageNumber === currentPage}
+					class:disabled={pageNumber === -1}
+					class:pointer-events-none={pageNumber === currentPage}
 				>
 					<a
 						class="page-link"
@@ -68,7 +69,7 @@
 					</a>
 				</li>
 			{/each}
-			<li class="page-item" class:disabled={currentPage == totalPages}>
+			<li class="page-item" class:disabled={currentPage === totalPages}>
 				<a
 					class="page-link"
 					href={'#'}
@@ -81,3 +82,9 @@
 		</ul>
 	</nav>
 {/if}
+
+<style>
+	.pointer-events-none {
+		pointer-events: none;
+	}
+</style>
