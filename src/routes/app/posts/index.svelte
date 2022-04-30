@@ -49,6 +49,10 @@
 			loadPosts(currentPage);
 		}
 	}
+
+	function truncateDescription(description: string) {
+		return description.length > 100 ? description.substring(0, 100) + '...' : description;
+	}
 </script>
 
 <div class="container mt-3">
@@ -57,11 +61,11 @@
 			<h1 class="lead fs-1 text-center">Posts</h1>
 		</div>
 		<div>
-			<Paginator {totalItems} {currentPage} {pageSize} on:pagechange={handlePageChange} />
+			<a class="btn btn-primary" href="/app/posts/new"> New Post </a>
 		</div>
 	</div>
 	{#if isLoading}
-		<div class="text-center" style="margin-top: 100px;">
+		<div class="text-center" style="margin-top: 50px;">
 			<div class="spinner-border spinner-size" role="status">
 				<span class="visually-hidden">Loading...</span>
 			</div>
@@ -72,7 +76,7 @@
 				<div class="col">
 					<div class="card shadow">
 						<div class="card-header d-flex justify-content-between">
-							<div>
+							<div class="text-truncate">
 								{post.title}
 							</div>
 							<div>
@@ -90,7 +94,7 @@
 								{/each}
 							</div>
 							<a href="/app/posts/{post.id}" class="text-decoration-none text-black stretched-link">
-								{post.description}
+								{truncateDescription(post.description)}
 							</a>
 						</div>
 					</div>
@@ -98,7 +102,9 @@
 			{/each}
 		</div>
 	{/if}
-	<div class="mt-3 d-flex justify-content-end" />
+	<div class="mt-4 d-flex justify-content-end">
+		<Paginator {totalItems} {currentPage} {pageSize} on:pagechange={handlePageChange} />
+	</div>
 </div>
 
 <style>
