@@ -36,11 +36,11 @@
 	let isLoading: boolean = false;
 	async function loadPosts(pageNumber: number) {
 		isLoading = true;
-		const { posts: pagedPosts } = await postStore.load({
+		await postStore.load({
 			pageNumber
 		});
 
-		posts = pagedPosts;
+		posts = $postStore;
 		isLoading = false;
 	}
 
@@ -70,7 +70,7 @@
 		<div class="row row-cols-1 g-3 row-cols-md-2">
 			{#each posts as post}
 				<div class="col">
-					<div class="card shadow-sm">
+					<div class="card shadow">
 						<div class="card-header d-flex justify-content-between">
 							<div>
 								{post.title}
@@ -82,7 +82,16 @@
 							</div>
 						</div>
 						<div class="card-body">
-							<p class="m-0">{post.description}</p>
+							<div class="d-flex gap-1 mb-2">
+								{#each post.tags as tag}
+									<span class="badge rounded-pill bg-secondary">
+										#{tag}
+									</span>
+								{/each}
+							</div>
+							<a href="/app/posts/{post.id}" class="text-decoration-none text-black stretched-link">
+								{post.description}
+							</a>
 						</div>
 					</div>
 				</div>

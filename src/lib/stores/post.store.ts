@@ -13,6 +13,7 @@ type PostStore = {
 	update: Writable<Post[]>['update'];
 
 	load(info: { pageNumber: number }): Promise<LoadReturnType>;
+	loadById(id: number): Promise<Post | undefined>;
 };
 
 function createPostStore(): PostStore {
@@ -26,6 +27,10 @@ function createPostStore(): PostStore {
 			const { posts, totalItems, pageSize } = await loadPagedPosts(pageNumber);
 			set(posts);
 			return { posts, totalItems, pageSize };
+		},
+		async loadById(id) {
+			const post = await loadPostById(id);
+			return post;
 		}
 	};
 }
@@ -57,6 +62,11 @@ async function loadPagedPosts(pageNumber: number) {
 	};
 }
 
+async function loadPostById(id: number) {
+	await stall(1000);
+	return posts.find((post) => post.id === id);
+}
+
 // fake db
 const posts: Post[] = [
 	{
@@ -64,7 +74,7 @@ const posts: Post[] = [
 		title: 'Hello World',
 		description: 'This is a sample post',
 		tags: ['hello', 'world'],
-		body: 'Hello World',
+		body: '# Hello World',
 		createdAt: new Date()
 	},
 	{
@@ -72,7 +82,7 @@ const posts: Post[] = [
 		title: 'Hello World 2',
 		description: 'This is a sample post 2',
 		tags: ['hello', 'world'],
-		body: 'Hello World 2',
+		body: '# Hello World 2',
 		createdAt: new Date()
 	},
 	{
@@ -80,7 +90,7 @@ const posts: Post[] = [
 		title: 'Hello World 3',
 		description: 'This is a sample post 3',
 		tags: ['hello', 'world'],
-		body: 'Hello World 3',
+		body: '# Hello World 3',
 		createdAt: new Date()
 	},
 	{
@@ -88,7 +98,7 @@ const posts: Post[] = [
 		title: 'Hello World 4',
 		description: 'This is a sample post 4',
 		tags: ['hello', 'world'],
-		body: 'Hello World 4',
+		body: '# Hello World 4',
 		createdAt: new Date()
 	},
 	{
@@ -96,7 +106,7 @@ const posts: Post[] = [
 		title: 'Hello World 5',
 		description: 'This is a sample post 5',
 		tags: ['hello', 'world'],
-		body: 'Hello World 5',
+		body: '# Hello World 5',
 		createdAt: new Date()
 	},
 	{
@@ -104,7 +114,7 @@ const posts: Post[] = [
 		title: 'Hello World 6',
 		description: 'This is a sample post 6',
 		tags: ['hello', 'world'],
-		body: 'Hello World 6',
+		body: '# Hello World 6',
 		createdAt: new Date()
 	},
 	{
@@ -112,7 +122,7 @@ const posts: Post[] = [
 		title: 'Hello World 7',
 		description: 'This is a sample post 7',
 		tags: ['hello', 'world'],
-		body: 'Hello World 7',
+		body: '# Hello World 7',
 		createdAt: new Date()
 	},
 	{
@@ -120,7 +130,7 @@ const posts: Post[] = [
 		title: 'Hello World 8',
 		description: 'This is a sample post 8',
 		tags: ['hello', 'world'],
-		body: 'Hello World 8',
+		body: '# Hello World 8',
 		createdAt: new Date()
 	},
 	{
@@ -128,7 +138,7 @@ const posts: Post[] = [
 		title: 'Hello World 9',
 		description: 'This is a sample post 9',
 		tags: ['hello', 'world'],
-		body: 'Hello World 9',
+		body: '# Hello World 9',
 		createdAt: new Date()
 	}
 ];
