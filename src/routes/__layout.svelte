@@ -12,6 +12,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>SvelteKit App</title>
+</svelte:head>
+
 <ToastContainer />
 <Navbar />
 <slot />
