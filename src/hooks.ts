@@ -9,7 +9,7 @@ type Cookies = {
 const handleInvalidToken: Handle = async ({ event, resolve }) => {
 	event.locals.flashMessages.push({
 		title: 'Error',
-		body: 'Invalid authenticatino token.',
+		body: 'Invalid authentication token.',
 		color: 'danger',
 		removeAfter: 3000
 	});
