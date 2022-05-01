@@ -26,14 +26,7 @@
 	>
 		{#each $toastStore as toast (toast.id)}
 			<div animate:flip transition:fade>
-				<Toast
-					on:close={() => toastStore.removeToast(toast.id)}
-					title={toast.title}
-					body={toast.body}
-					additionalInfo={toast.additionalInfo}
-					color={toast.color}
-					actions={toast.actions}
-				/>
+				<Toast {...toast} />
 			</div>
 		{/each}
 	</div>

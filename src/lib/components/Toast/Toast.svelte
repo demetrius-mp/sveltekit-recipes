@@ -1,29 +1,28 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
 	import Icon from './Icon.svelte';
-	import type { Action, Color } from './types';
+	import toastStore from './toast.store';
+	import type { Action, Toast as ToastProps } from './types';
 
-	export let title: string;
-	export let body: string;
-	export let additionalInfo: string = '';
-	export let color: Color = 'primary';
-	export let actions: Action[] = [];
-
-	type EventType = {
-		close: void;
-	};
-
-	const dispatch = createEventDispatcher<EventType>();
-
-	function dispatchClose() {
-		dispatch('close');
-	}
+	export let id: ToastProps['id'];
+	export let title: ToastProps['title'];
+	export let body: ToastProps['body'];
+	export let additionalInfo: ToastProps['additionalInfo'] = '';
+	export let color: ToastProps['color'] = 'primary';
+	export let removeAfter: ToastProps['removeAfter'] = 'never';
+	export let actions: ToastProps['actions'] = [];
 
 	async function runAction(action: Action) {
 		await action.execute();
 		if (action.closeToastOnClick) {
-			dispatchClose();
+			toastStore.removeToast(id);
 		}
+	}
+
+	if (removeAfter !== 'never') {
+		toastStore.removeToastAfter({
+			id,
+			milliseconds: removeAfter
+		});
 	}
 </script>
 
@@ -34,7 +33,12 @@
 		{#if additionalInfo}
 			<small>{additionalInfo}</small>
 		{/if}
-		<button type="button" class="btn-close" aria-label="Close" on:click={dispatchClose} />
+		<button
+			type="button"
+			class="btn-close"
+			aria-label="Close"
+			on:click={() => toastStore.removeToast(id)}
+		/>
 	</div>
 	<div class="toast-body">
 		{body}
