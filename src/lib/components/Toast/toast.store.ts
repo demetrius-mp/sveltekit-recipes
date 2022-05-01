@@ -19,24 +19,20 @@ function createToastStore(): ToastStore {
 	return {
 		subscribe,
 		removeToast,
-		addToast({ body, title, additionalInfo, color, removeAfter }) {
-			const id = new Date().valueOf() + body;
+		addToast(toastInfo) {
+			const id = new Date().valueOf() + toastInfo.body;
 			update((all) => [
 				{
 					id,
-					color,
-					body,
-					title,
-					additionalInfo,
-					removeAfter
+					...toastInfo
 				},
 				...all
 			]);
 
-			if (removeAfter !== 'never') {
+			if (toastInfo.removeAfter !== 'never') {
 				setTimeout(() => {
 					removeToast(id);
-				}, removeAfter);
+				}, toastInfo.removeAfter);
 			}
 			return id;
 		}

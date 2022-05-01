@@ -1,3 +1,5 @@
+import type { MaybePromise } from '@sveltejs/kit/types/private';
+
 export type Color =
 	| 'primary'
 	| 'secondary'
@@ -8,6 +10,13 @@ export type Color =
 	| 'light'
 	| 'dark';
 
+export type Action = {
+	label: string;
+	color: Color | `outline-${Color}`;
+	execute: () => MaybePromise<void>;
+	closeToastOnClick?: boolean;
+};
+
 export type Toast = {
 	id: string;
 	color: Color;
@@ -15,6 +24,7 @@ export type Toast = {
 	body: string;
 	additionalInfo?: string;
 	removeAfter: number | 'never';
+	actions?: Action[];
 };
 
 export type ToastCreateInput = Omit<Toast, 'id'>;

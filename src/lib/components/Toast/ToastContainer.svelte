@@ -32,6 +32,7 @@
 					body={toast.body}
 					additionalInfo={toast.additionalInfo}
 					color={toast.color}
+					actions={toast.actions}
 				/>
 			</div>
 		{/each}
