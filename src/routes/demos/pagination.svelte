@@ -1,0 +1,115 @@
+<script lang="ts" context="module">
+	import Paginator from '$lib/components/Paginator';
+	import type { HandlePageChange } from '$lib/components/Paginator/Paginator.svelte';
+	import postStore from '$lib/stores/post.store';
+	import type { Post } from '$lib/types';
+	import { formatDate } from '$lib/utils/formatter.utils';
+	import type { Load } from '@sveltejs/kit';
+
+	export const load: Load = async () => {
+		const { posts, pageSize, totalItems } = await postStore.load({
+			pageNumber: 1
+		});
+
+		return {
+			props: {
+				posts,
+				pageSize,
+				totalItems
+			}
+		};
+	};
+</script>
+
+<script lang="ts">
+	export let posts: Post[];
+	export let pageSize: number;
+	export let totalItems: number;
+
+	let currentPage: number = 1;
+	let isFirstLoad: boolean = true;
+	const handlePageChange: HandlePageChange = async (e) => {
+		currentPage = e.detail;
+		isFirstLoad = false;
+	};
+
+	let isLoading: boolean = false;
+	async function loadPosts(pageNumber: number) {
+		isLoading = true;
+		await postStore.load({
+			pageNumber
+		});
+
+		posts = $postStore;
+		isLoading = false;
+	}
+
+	$: {
+		if (!isFirstLoad) {
+			loadPosts(currentPage);
+		}
+	}
+
+	function truncateDescription(description: string) {
+		return description.length > 100 ? description.substring(0, 100) + '...' : description;
+	}
+</script>
+
+<div class="container mt-3">
+	<div class="d-flex justify-content-between">
+		<div>
+			<h1 class="lead fs-1 text-center">Posts</h1>
+		</div>
+		<div>
+			<a class="btn btn-primary" href="/app/posts/new"> New Post </a>
+		</div>
+	</div>
+	{#if isLoading}
+		<div class="text-center" style="margin-top: 50px;">
+			<div class="spinner-border spinner-size" role="status">
+				<span class="visually-hidden">Loading...</span>
+			</div>
+		</div>
+	{:else}
+		<div class="row row-cols-1 g-3 row-cols-md-2">
+			{#each posts as post}
+				<div class="col">
+					<div class="card shadow">
+						<div class="card-header d-flex justify-content-between">
+							<div class="text-truncate">
+								{post.title}
+							</div>
+							<div>
+								<span class="text-muted small">
+									{formatDate(post.createdAt)}
+								</span>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="d-flex gap-1 mb-2">
+								{#each post.tags as tag}
+									<span class="badge rounded-pill bg-secondary">
+										#{tag}
+									</span>
+								{/each}
+							</div>
+							<a href="/app/posts/{post.id}" class="text-decoration-none text-black stretched-link">
+								{truncateDescription(post.description)}
+							</a>
+						</div>
+					</div>
+				</div>
+			{/each}
+		</div>
+	{/if}
+	<div class="mt-4 d-flex justify-content-end">
+		<Paginator {totalItems} {currentPage} {pageSize} on:pagechange={handlePageChange} />
+	</div>
+</div>
+
+<style>
+	.spinner-size {
+		width: 3rem;
+		height: 3rem;
+	}
+</style>
