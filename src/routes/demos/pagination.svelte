@@ -1,67 +1,82 @@
 <script lang="ts" context="module">
 	import Paginator from '$lib/components/Paginator';
 	import type { HandlePageChange } from '$lib/components/Paginator/Paginator.svelte';
-	import postStore from '$lib/stores/post.store';
-	import type { Post } from '$lib/types';
-	import { formatDate } from '$lib/utils/formatter.utils';
 	import type { Load } from '@sveltejs/kit';
 
 	export const load: Load = async () => {
-		const { posts, pageSize, totalItems } = await postStore.load({
-			pageNumber: 1
-		});
+		const { items, pageSize, totalItems } = await mockLoadItemsAsync(1);
 
 		return {
 			props: {
-				posts,
+				items,
 				pageSize,
 				totalItems
 			}
 		};
 	};
+
+	// the return type of a function that loads more items must follow this type
+	type PagedItemList<T = any> = {
+		items: T[];
+		pageSize: number;
+		totalItems: number;
+	};
+
+	type Item = {
+		id: number;
+		info: string;
+	};
+
+	async function mockLoadItemsAsync(pageNumber: number): Promise<PagedItemList<Item>> {
+		await new Promise((resolve) => setTimeout(resolve, 1000));
+		const PAGE_SIZE = 5;
+		const TOTAL_ITEMS = 100;
+
+		const items: Item[] = [];
+		for (let index = 1; index <= PAGE_SIZE; index++) {
+			const currentId = (pageNumber - 1) * PAGE_SIZE + index;
+			const item: Item = {
+				id: currentId,
+				info: `Item ${index}`
+			};
+
+			items.push(item);
+		}
+
+		return {
+			items,
+			pageSize: PAGE_SIZE,
+			totalItems: TOTAL_ITEMS
+		};
+	}
 </script>
 
 <script lang="ts">
-	export let posts: Post[];
+	export let items: Item[];
 	export let pageSize: number;
 	export let totalItems: number;
 
 	let currentPage: number = 1;
-	let isFirstLoad: boolean = true;
 	const handlePageChange: HandlePageChange = async (e) => {
 		currentPage = e.detail;
-		isFirstLoad = false;
+		loadItems(currentPage);
 	};
 
 	let isLoading: boolean = false;
-	async function loadPosts(pageNumber: number) {
+	async function loadItems(pageNumber: number) {
 		isLoading = true;
-		await postStore.load({
-			pageNumber
-		});
-
-		posts = $postStore;
+		items = (await mockLoadItemsAsync(pageNumber)).items;
 		isLoading = false;
-	}
-
-	$: {
-		if (!isFirstLoad) {
-			loadPosts(currentPage);
-		}
-	}
-
-	function truncateDescription(description: string) {
-		return description.length > 100 ? description.substring(0, 100) + '...' : description;
 	}
 </script>
 
 <div class="container mt-3">
 	<div class="d-flex justify-content-between">
 		<div>
-			<h1 class="lead fs-1 text-center">Posts</h1>
+			<h1 class="lead fs-1 text-center">Items</h1>
 		</div>
 		<div>
-			<a class="btn btn-primary" href="/app/posts/new"> New Post </a>
+			<a class="btn btn-primary" href="/app/posts/new"> New Item </a>
 		</div>
 	</div>
 	{#if isLoading}
@@ -72,32 +87,10 @@
 		</div>
 	{:else}
 		<div class="row row-cols-1 g-3 row-cols-md-2">
-			{#each posts as post}
-				<div class="col">
-					<div class="card shadow">
-						<div class="card-header d-flex justify-content-between">
-							<div class="text-truncate">
-								{post.title}
-							</div>
-							<div>
-								<span class="text-muted small">
-									{formatDate(post.createdAt)}
-								</span>
-							</div>
-						</div>
-						<div class="card-body">
-							<div class="d-flex gap-1 mb-2">
-								{#each post.tags as tag}
-									<span class="badge rounded-pill bg-secondary">
-										#{tag}
-									</span>
-								{/each}
-							</div>
-							<a href="/app/posts/{post.id}" class="text-decoration-none text-black stretched-link">
-								{truncateDescription(post.description)}
-							</a>
-						</div>
-					</div>
+			{#each items as item}
+				<div class="col text-center">
+					<h1>{item.id}</h1>
+					<p>{item.info}</p>
 				</div>
 			{/each}
 		</div>

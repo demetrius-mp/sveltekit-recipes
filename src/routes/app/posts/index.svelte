@@ -1,9 +1,9 @@
 <script lang="ts" context="module">
 	import Paginator from '$lib/components/Paginator';
 	import type { HandlePageChange } from '$lib/components/Paginator/Paginator.svelte';
+	import PostCard from '$lib/components/PostCard.svelte';
 	import postStore from '$lib/stores/post.store';
 	import type { Post } from '$lib/types';
-	import { formatDate } from '$lib/utils/formatter.utils';
 	import type { Load } from '@sveltejs/kit';
 
 	export const load: Load = async () => {
@@ -27,10 +27,9 @@
 	export let totalItems: number;
 
 	let currentPage: number = 1;
-	let isFirstLoad: boolean = true;
 	const handlePageChange: HandlePageChange = async (e) => {
 		currentPage = e.detail;
-		isFirstLoad = false;
+		loadPosts(currentPage);
 	};
 
 	let isLoading: boolean = false;
@@ -42,16 +41,6 @@
 
 		posts = $postStore;
 		isLoading = false;
-	}
-
-	$: {
-		if (!isFirstLoad) {
-			loadPosts(currentPage);
-		}
-	}
-
-	function truncateDescription(description: string) {
-		return description.length > 100 ? description.substring(0, 100) + '...' : description;
 	}
 </script>
 
@@ -74,30 +63,7 @@
 		<div class="row row-cols-1 g-3 row-cols-md-2">
 			{#each posts as post}
 				<div class="col">
-					<div class="card shadow">
-						<div class="card-header d-flex justify-content-between">
-							<div class="text-truncate">
-								{post.title}
-							</div>
-							<div>
-								<span class="text-muted small">
-									{formatDate(post.createdAt)}
-								</span>
-							</div>
-						</div>
-						<div class="card-body">
-							<div class="d-flex gap-1 mb-2">
-								{#each post.tags as tag}
-									<span class="badge rounded-pill bg-secondary">
-										#{tag}
-									</span>
-								{/each}
-							</div>
-							<a href="/app/posts/{post.id}" class="text-decoration-none text-black stretched-link">
-								{truncateDescription(post.description)}
-							</a>
-						</div>
-					</div>
+					<PostCard {...post} />
 				</div>
 			{/each}
 		</div>
