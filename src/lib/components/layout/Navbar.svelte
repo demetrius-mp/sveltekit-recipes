@@ -10,7 +10,7 @@
 
 	async function signOut() {
 		await userStore.signOut();
-		toastStore.addToast({
+		toastStore.push({
 			title: 'Success',
 			body: 'Signed out successfully!',
 			color: 'success',

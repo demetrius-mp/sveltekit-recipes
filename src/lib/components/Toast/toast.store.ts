@@ -5,29 +5,29 @@ import type { Toast, ToastCreateInput } from './types';
 type ToastStore = {
 	subscribe: Writable<Toast[]>['subscribe'];
 
-	addToast: (toast: ToastCreateInput) => string;
-	removeToast: (id: string) => void;
-	removeToastAfter: ({ id, milliseconds }: { id: string; milliseconds: number }) => void;
+	push: (toast: ToastCreateInput) => string;
+	close: (id: string) => void;
+	closeAfter: ({ id, milliseconds }: { id: string; milliseconds: number }) => void;
 };
 
 function createToastStore(): ToastStore {
 	const { subscribe, update } = writable<Toast[]>([]);
 
-	const removeToast: ToastStore['removeToast'] = (id) => {
+	const close: ToastStore['close'] = (id) => {
 		update((all) => all.filter((toast) => toast.id !== id));
 	};
 
-	const removeToastAfter: ToastStore['removeToastAfter'] = ({ id, milliseconds }) => {
+	const closeAfter: ToastStore['closeAfter'] = ({ id, milliseconds }) => {
 		setTimeout(() => {
-			removeToast(id);
+			close(id);
 		}, milliseconds);
 	};
 
 	return {
 		subscribe,
-		removeToast,
-		removeToastAfter,
-		addToast(toastInfo) {
+		close,
+		closeAfter,
+		push(toastInfo) {
 			const id = new Date().valueOf() + toastInfo.body;
 			update((all) => [
 				{

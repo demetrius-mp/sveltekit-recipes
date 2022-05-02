@@ -2,7 +2,7 @@
 	import { toastStore } from '$lib/components/Toast';
 
 	function handlePushToastWithActions() {
-		toastStore.addToast({
+		toastStore.push({
 			title: 'Hello',
 			body: 'This is a toast',
 			color: 'danger',
@@ -24,7 +24,7 @@
 	}
 
 	function handlePushBasicToast() {
-		toastStore.addToast({
+		toastStore.push({
 			title: 'Hello',
 			body: 'This is a toast',
 			color: 'success',
@@ -33,7 +33,7 @@
 	}
 
 	function handlePushPromiseToast() {
-		toastStore.addToast({
+		toastStore.push({
 			title: 'Hello',
 			body: 'This is a toast',
 			color: 'warning',

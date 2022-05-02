@@ -48,7 +48,7 @@
 			});
 
 			if (response.ok) {
-				toastStore.addToast({
+				toastStore.push({
 					body: 'You have been signed up successfully.',
 					removeAfter: 3000,
 					title: 'Success',

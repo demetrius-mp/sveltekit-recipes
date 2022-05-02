@@ -16,12 +16,12 @@
 	async function runAction(action: Action) {
 		await action.execute();
 		if (action.closeToastOnClick) {
-			toastStore.removeToast(id);
+			toastStore.close(id);
 		}
 	}
 
 	if (!promise && removeAfter !== 'never') {
-		toastStore.removeToastAfter({
+		toastStore.closeAfter({
 			id,
 			milliseconds: removeAfter
 		});
@@ -32,7 +32,7 @@
 			await promise.resolve();
 
 			if (removeAfter !== 'never') {
-				toastStore.removeToastAfter({
+				toastStore.closeAfter({
 					id,
 					milliseconds: removeAfter
 				});
@@ -70,7 +70,7 @@
 				type="button"
 				class="btn-close"
 				aria-label="Close"
-				on:click={() => toastStore.removeToast(id)}
+				on:click={() => toastStore.close(id)}
 			/>
 		</div>
 		<div class="toast-body">

@@ -29,7 +29,7 @@
 		onSubmit: async (values) => {
 			try {
 				await userStore.signIn({ ...values });
-				toastStore.addToast({
+				toastStore.push({
 					body: 'You have been signed in successfully.',
 					removeAfter: 3000,
 					title: 'Success',
@@ -39,7 +39,7 @@
 			} catch (err) {
 				if (err instanceof Error) {
 					console.error(err);
-					toastStore.addToast({
+					toastStore.push({
 						body: err.message,
 						removeAfter: 'never',
 						title: 'Error',

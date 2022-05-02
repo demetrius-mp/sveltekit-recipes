@@ -7,7 +7,7 @@
 
 	if ($session.flashMessages) {
 		$session.flashMessages.forEach((toast) => {
-			toastStore.addToast(toast);
+			toastStore.push(toast);
 		});
 	}
 </script>
