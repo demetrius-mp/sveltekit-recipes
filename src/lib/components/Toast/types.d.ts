@@ -17,6 +17,11 @@ export type Action = {
 	closeToastOnClick?: boolean;
 };
 
+export type ToastPromise = {
+	label: string;
+	resolve: () => Promise<void>;
+};
+
 export type Toast = {
 	id: string;
 	color: Color;
@@ -25,6 +30,7 @@ export type Toast = {
 	additionalInfo?: string;
 	removeAfter: number | 'never';
 	actions?: Action[];
+	promise?: ToastPromise;
 };
 
 export type ToastCreateInput = Omit<Toast, 'id'>;
