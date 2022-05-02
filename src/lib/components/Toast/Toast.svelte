@@ -59,7 +59,7 @@
 		</div>
 	</div>
 {:then _}
-	<div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+	<div in:fade class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
 		<div class="toast-header">
 			<Icon {color} />
 			<strong class="me-auto">{title}</strong>
