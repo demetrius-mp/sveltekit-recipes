@@ -33,10 +33,12 @@
 
 	async function mockLoadItemsAsync({
 		pageNumber,
-		query
+		query,
+		field
 	}: {
 		pageNumber: number;
 		query?: string;
+		field?: keyof Item;
 	}): Promise<PagedItemList<Item>> {
 		await new Promise((resolve) => setTimeout(resolve, 1000));
 		const PAGE_SIZE = 5;
@@ -55,8 +57,17 @@
 		const start = (pageNumber - 1) * PAGE_SIZE;
 		const end = start + PAGE_SIZE;
 
-		if (query) {
-			const filteredItems = items.filter((item) => item.info.includes(query));
+		if (query && field) {
+			if (field === 'id') {
+				const filteredItems = items.filter((item) => item[field] === parseInt(query, 10));
+				return {
+					items: filteredItems.slice(start, end),
+					pageSize: PAGE_SIZE,
+					totalItems: filteredItems.length
+				};
+			}
+
+			const filteredItems = items.filter((item) => item[field].includes(query));
 			return {
 				items: filteredItems.slice(start, end),
 				pageSize: PAGE_SIZE,
@@ -79,17 +90,20 @@
 
 	type FormProps = {
 		query: string;
+		field: keyof Item;
 	};
 
 	const { handleSubmit, form, isSubmitting } = createForm<FormProps>({
 		initialValues: {
-			query: ''
+			query: '',
+			field: 'info'
 		},
-		onSubmit: async ({ query }) => {
+		onSubmit: async ({ query, field }) => {
 			currentPage = 1;
 			await loadItems({
 				pageNumber: currentPage,
-				query
+				query,
+				field
 			});
 		}
 	});
@@ -104,12 +118,21 @@
 	};
 
 	let isLoading: boolean = false;
-	async function loadItems({ pageNumber, query }: { pageNumber: number; query?: string }) {
+	async function loadItems({
+		pageNumber,
+		query,
+		field
+	}: {
+		pageNumber: number;
+		query?: string;
+		field?: keyof Item;
+	}) {
 		isLoading = true;
 
 		const response = await mockLoadItemsAsync({
 			pageNumber,
-			query: query
+			query,
+			field
 		});
 		items = response.items;
 		pageSize = response.pageSize;
@@ -129,6 +152,10 @@
 		</div>
 		<div class="w-100">
 			<form on:submit={handleSubmit} class="input-group">
+				<select bind:value={$form.field} class="form-select" style="max-width: fit-content;">
+					<option value="id">ID</option>
+					<option value="info">Info</option>
+				</select>
 				<input bind:value={$form.query} type="search" class="form-control" placeholder="Search" />
 				<LoadingButton sm class="btn btn-outline-secondary" isLoading={$isSubmitting}>
 					<i class="bi bi-search" />
