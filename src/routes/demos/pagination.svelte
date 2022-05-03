@@ -117,16 +117,17 @@
 
 		isLoading = false;
 	}
+
+	$: start = (currentPage - 1) * pageSize + 1;
+	$: end = start + pageSize - 1;
 </script>
 
 <div class="container mt-3">
-	<div
-		class="d-flex flex-wrap gap-3 flex-sm-row flex-column justify-content-between align-items-center"
-	>
+	<div class="d-flex gap-3 flex-sm-row flex-column justify-content-between align-items-center">
 		<div>
 			<h1 class="lead fs-2 m-0 text-center">Items</h1>
 		</div>
-		<div class="flex-fill w-sm-100">
+		<div class="w-100">
 			<form on:submit={handleSubmit} class="input-group">
 				<input bind:value={$form.query} type="search" class="form-control" placeholder="Search" />
 				<LoadingButton sm class="btn btn-outline-secondary" isLoading={$isSubmitting}>
@@ -134,12 +135,21 @@
 				</LoadingButton>
 			</form>
 		</div>
-		<div class="w-sm-100">
-			<a class="btn btn-primary w-sm-100" href="/app/posts/new"> New Item </a>
-		</div>
+	</div>
+	<div class="mt-3">
+		<ul class="nav nav-tabs">
+			<li class="nav-item">
+				<span class="nav-link active" aria-current="page">List</span>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="/app/posts/new">Create</a>
+			</li>
+		</ul>
 	</div>
 	<div class="mt-1">
-		<span class="small text-muted">Showing {pageSize} of {totalItems} total items.</span>
+		<span class="small text-muted">
+			Showing records {start} to {end} out of {totalItems}.
+		</span>
 	</div>
 	{#if isLoading}
 		<div class="text-center" style="margin-top: 50px;">
@@ -170,11 +180,5 @@
 	.spinner-size {
 		width: 3rem;
 		height: 3rem;
-	}
-
-	@media (max-width: 576px) {
-		.w-sm-100 {
-			width: 100%;
-		}
 	}
 </style>
