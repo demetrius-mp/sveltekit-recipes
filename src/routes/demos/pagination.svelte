@@ -142,7 +142,13 @@
 	}
 
 	$: start = (currentPage - 1) * pageSize + 1;
-	$: end = start + pageSize - 1;
+	let end = currentPage * pageSize;
+	$: {
+		end = currentPage * pageSize;
+		if (end > totalItems) {
+			end = totalItems;
+		}
+	}
 </script>
 
 <div class="container mt-3">
