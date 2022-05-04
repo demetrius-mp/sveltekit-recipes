@@ -36,3 +36,16 @@ npm run build
 You can preview the production build with `npm run preview`.
 
 > To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+
+# About the project
+
+This project contains some recipes for SvelteKit apps. Currently includes:
+
+- JWT authentication with server side cookies (using SvelteKit endpoints)
+- A toast notification component
+- A pagination example (supports searching)
+- Form validation with yup and svelte-forms-lib
+
+## To Do
+
+- [ ] Find a more efficient way to handle [pagination](https://github.com/demetrius-mp/sveltekit-recipes/blob/d38b95e1223c08165f42a6a4a409f1d005828911/src/lib/components/Paginator/Paginator.svelte#L32).
