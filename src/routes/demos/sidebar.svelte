@@ -6,8 +6,6 @@
 		SidebarContent,
 		sidebarStore
 	} from '$lib/components/Sidebar';
-	import '$lib/components/Sidebar/sidebar.css';
-	import './../../app.css';
 
 	let items = [
 		{
