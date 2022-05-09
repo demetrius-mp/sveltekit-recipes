@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { session } from '$app/stores';
-	import { Navbar } from '$lib/components/layout';
 	import { ToastContainer, toastStore } from '$lib/components/Toast';
 	import 'bootstrap-icons/font/bootstrap-icons.css';
 	import 'bootstrap/dist/css/bootstrap.min.css';
@@ -17,5 +16,4 @@
 </svelte:head>
 
 <ToastContainer />
-<Navbar />
 <slot />
